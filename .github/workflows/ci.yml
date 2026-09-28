@@ -10,10 +10,10 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkoutv4
+        uses: actions/checkout@v4
 
       - name: Setup python
-        uses: actions/setup-pyhtonv5
+        uses: actions/setup-pyhton@v5
         with:
           python-version: "3.11"
 
