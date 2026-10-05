@@ -12,6 +12,7 @@ def health():
 @app.get("/hello")
 def hello():
     return{"message": "Some message"}
+
 @app.post("/api/users", status_code=status.HTTP_201_CREATED)
 def add_user(new_user: UserCreate):
     for existing_user in users:
@@ -46,7 +47,7 @@ def delete_user(user_id: int):
         if existing_user.user_id == user_id:
             users.pop(index) 
             return Response(status_code=status.HTTP_204_NO_CONTENT) 
-        raise HTTPException( 
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail="User not found", 
+    raise HTTPException( 
+        status_code=status.HTTP_404_NOT_FOUND, 
+        detail="User not found", 
 ) 
