@@ -7,6 +7,9 @@ from app.schema import UserCreate, UserRead
 from app.database import engine, get_db
 from app.models import Base, UserDB
 
+import httpx
+from app.product_client import get_product_fetcher
+
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title = "Lab 1 - FastAPI User API")
 
@@ -70,3 +73,18 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.delete(db_user) 
     db.commit() 
     return
+
+@app.get("/api/products/{product_id}")
+def get_remote_product(
+    product_id: int,
+    product_fetcher=Depends(get_product_fetcher),
+):
+    try:
+        return product_fetcher(product_id)
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Product not found") from exc
+        else:
+            raise HTTPException(status_code=502, detail="Product service error") from exc
+    except httpx.RequestError as exc:
+        raise HTTPException(status_code=503, detail="Product service unavailable") from exc
