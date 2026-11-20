@@ -13,4 +13,3 @@ class UserDB(Base):
         String(255), unique=True, index=True, nullable=False) 
     age: Mapped[int] = mapped_column(Integer, nullable=False) 
     student_id: Mapped[str] = mapped_column(String(8), unique=True, nullable=False)
-
